@@ -1,0 +1,39 @@
+﻿body {
+    background: #333333;
+}
+
+.app {
+    min-height: 800px;
+    background: #fff;
+}
+
+.glyphicon-md {
+    font-size: 200%;
+}
+
+.glyphicon-lg {
+    font-size: 300%;
+}
+
+.py-4 {
+    padding-top: 6em;
+    padding-bottom: 6em;
+}
+.mt-0 {
+    margin-top: 0;
+}
+.mb-2 {
+    margin-bottom: 1em;
+}
+.bg-default {
+    background-color: #eeeeee;
+}
+
+.bg-dark {
+    background-color: #333333;
+}
+
+footer {
+    color: #eeeeee;
+    padding: 30px 0 20px 0;
+}

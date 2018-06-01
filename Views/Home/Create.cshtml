@@ -1,0 +1,112 @@
+﻿@model Piccolo.ViewModels.UrlsViewModel
+
+@{
+    ViewBag.Title = "Urls";
+}
+
+<div class="container-fluid">
+    <div class="container py-4">
+
+        <h1>Home <small>Manage Urls</small></h1>
+
+        <div class="jumbotron text-center">
+            <div class="row">
+                <div class="col-sm-10 col-sm-offset-1 text-center">
+
+                    @if (TempData["PiccoloUrl"] != null)
+                    {
+                        <div class="alert alert-info text-left" role="alert">
+                            <p class="lead"><strong>Nice!</strong> Use this shortened url: <a target="_blank" href="@TempData["PiccoloUrl"]" class="alert-link">@TempData["PiccoloUrl"]</a></p>
+                        </div>
+                    }
+                    
+                    <form action="@Url.RouteUrl("CreateUrlPost")" method="post" >
+                        
+                        @Html.AntiForgeryToken()
+
+                        <div class="input-group">
+                            <input type="text" class="form-control input-lg" id="UrlToPiccolo" name="UrlToPiccolo" placeholder="Enter your url..." autocomplete="off">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary btn-lg" type="submit">
+                                    <i class="glyphicon glyphicon-link"></i> Get Link
+                                </button>
+                            </span>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title"><i class="glyphicon glyphicon-star"></i> New</h2>
+                        <small class="text-muted">Most recent urls</small>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group text-left">
+                            @foreach (var u in Model.NewUrls)
+                            {
+                                <li class="list-group-item">@u.ShortUrl
+                                    <p class="list-group-item-text">
+                                        <small class="text-muted">Created @u.DateFormatted</small>
+                                    </p>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title"><i class="glyphicon glyphicon-flag"></i> Popular</h2>
+                        <small class="text-muted">Most visited urls</small>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group text-left">
+                            @foreach (var u in Model.PopularUrls)
+                            {
+                                <li class="list-group-item">
+                                    <span class="badge">@u.CountFormatted</span>
+                                    @u.ShortUrl
+                                    <p class="list-group-item-text">
+                                        <small class="text-muted">Created @u.DateFormatted</small>
+                                    </p>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title"><i class="glyphicon glyphicon-time"></i> Recent</h2>
+                        <small class="text-muted">Recently visited urls</small>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group text-left">
+                            @foreach (var u in Model.RecentUrls)
+                            {
+                                <li class="list-group-item">
+                                    @u.ShortUrl
+                                    <p class="list-group-item-text">
+                                        <small class="text-muted">Created @u.DateFormatted</small>
+                                    </p>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
