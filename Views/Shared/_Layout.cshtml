@@ -24,6 +24,10 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li><a href="@Url.RouteUrl("CreateUrl")">Create</a></li>
+                        if (User.IsInRole("AppAdmin"))
+                        {
+                            <li><a href="@Url.RouteUrl("SuperSecret")">Super Secret</a></li>
+                        }
                     }
                 </ul>
 

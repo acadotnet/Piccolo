@@ -7,6 +7,9 @@ using HashidsNet;
 using Microsoft.AspNet.Identity;
 using Piccolo.Models;
 using Piccolo.ViewModels;
+using System.Data.Entity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace Piccolo.Controllers
 {
@@ -15,11 +18,13 @@ namespace Piccolo.Controllers
     public class HomeController : Controller
     {
         protected readonly ApplicationDbContext _context;
+        protected readonly ApplicationUserManager _userManager;
         protected readonly Hashids _hashids;
 
-        public HomeController()
+        public HomeController(ApplicationDbContext context, ApplicationUserManager userManager)
         {
-            _context = new ApplicationDbContext();
+            _context = context;
+            _userManager = userManager;
             _hashids = new Hashids("PiccoloUrl", 4);
         }
 
@@ -27,12 +32,27 @@ namespace Piccolo.Controllers
         [Route("", Name = "About")]
         public ActionResult About()
         {
+            //if (User.IsInRole("AppAdmin"))
             if (User.Identity.IsAuthenticated)
             {
                 return RedirectToRoute("CreateUrl");
             }
 
             return View();
+        }
+
+        [Authorize(Roles="AppAdmin")]
+        [Route("SuperSecret", Name = "SuperSecret")]
+        public ActionResult SuperSecret()
+        {
+            var urls = _context.ShortUrls.Include(u => u.ApplicationUser).ToList();
+            foreach (var shortUrl in urls)
+            {
+                var thisUser = _userManager.FindById(shortUrl.ApplicationUserId);
+                var thisUserRoles = _userManager.GetRoles(shortUrl.ApplicationUserId);
+            }
+
+            return View(urls);
         }
 
         [Route("Create" , Name = "CreateUrl")]
