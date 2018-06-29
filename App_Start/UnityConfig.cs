@@ -4,11 +4,14 @@ using System.Web;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
+using Piccolo.Clients;
+using Piccolo.Clients.Interfaces;
 using Piccolo.Models;
 using Unity;
 using Unity.AspNet.Mvc;
 using Unity.Injection;
 using Unity.Lifetime;
+using System.Configuration;
 
 namespace Piccolo
 {
@@ -43,11 +46,14 @@ namespace Piccolo
         /// </remarks>
         public static void RegisterTypes(IUnityContainer container)
         {
+            var sendGridApiKey = ConfigurationManager.AppSettings["SendGridApiKey"];
+
             container.RegisterType<DbContext, ApplicationDbContext>(new PerRequestLifetimeManager());
             container.RegisterType<ApplicationDbContext>(new PerRequestLifetimeManager());
             container.RegisterType<UserManager<ApplicationUser>>(new PerRequestLifetimeManager());
             container.RegisterType<IAuthenticationManager>(new InjectionFactory(c => HttpContext.Current.GetOwinContext().Authentication));
             container.RegisterType<IUserStore<ApplicationUser>, UserStore<ApplicationUser>>(new PerRequestLifetimeManager());
+            container.RegisterType<IEmailClient, SendGridEmailClient>(new InjectionConstructor(sendGridApiKey));
         }
     }
 }

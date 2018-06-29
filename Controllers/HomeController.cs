@@ -8,8 +8,10 @@ using Microsoft.AspNet.Identity;
 using Piccolo.Models;
 using Piccolo.ViewModels;
 using System.Data.Entity;
+using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
+using Piccolo.Clients;
 
 namespace Piccolo.Controllers
 {
@@ -23,6 +25,8 @@ namespace Piccolo.Controllers
 
         public HomeController(ApplicationDbContext context, ApplicationUserManager userManager)
         {
+
+
             _context = context;
             _userManager = userManager;
             _hashids = new Hashids("PiccoloUrl", 4);
@@ -30,8 +34,9 @@ namespace Piccolo.Controllers
 
         [AllowAnonymous]
         [Route("", Name = "About")]
-        public ActionResult About()
+        public async Task<ActionResult> About()
         {
+            
             //if (User.IsInRole("AppAdmin"))
             if (User.Identity.IsAuthenticated)
             {
